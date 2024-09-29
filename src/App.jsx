@@ -7,7 +7,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      {/* <Route path="/build" element={<Builder />} /> */}
     </Routes>
   );
 }

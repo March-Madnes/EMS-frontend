@@ -30,7 +30,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/visual" element={<TemplateReact/>}></Route>
+        <Route path="/visual/:id" element={<TemplateReact/>}></Route>
       </Routes>
     </AuthProvider>
   );

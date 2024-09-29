@@ -1,102 +1,7 @@
-import React, { Fragment, useState } from "react";
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
-import { Listbox, Transition } from "@headlessui/react";
-// import "@fontsource/poppins";
-const people = [
-  {
-    name: "btc",
-    img: "/assets/admin/analytics-dashboard/btc.png",
-    price: "$224,300.40",
-    percentage: "7.2526",
-    color: "red",
-  },
-  {
-    name: "ust",
-    img: "/assets/admin/analytics-dashboard/ust.png",
-    price: "$13,400.20",
-    percentage: "9.5256",
-    color: "green",
-  },
-  {
-    name: "eth",
-    img: "/assets/admin/analytics-dashboard/eth.png",
-    price: "$4,000.80",
-    percentage: "8.4",
-    color: "green",
-  },
-  {
-    name: "car",
-    img: "/assets/admin/analytics-dashboard/car.png",
-    price: " $1,900.1,",
-    percentage: "8.4",
-    color: "red",
-  },
-];
-const chartData = [
-  { name: "Weekly" },
-  {
-    name: "Monthly",
-  },
-  { name: "Yearly" },
-];
+import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const options2 = {
-  chart: {
-    type: "column",
-    height: 400,
-    width: 650,
-  },
-  xAxis: {
-    categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-  },
-  yAxis: {
-    categories: null,
-    title: {
-      text: null,
-    },
-  },
-  title: false,
-  series: [
-    {
-      name: "Bitcoin",
-      data: [
-        27500, 50000, 60000, 65000, 40000, 50000, 27500, 50000, 60000, 65000,
-        40000, 50000,
-      ],
-      color: "#7851BD",
-      borderRadius: 5,
-    },
-    {
-      name: "Ethereum",
-      data: [
-        18000, 30000, 37000, 37000, 25000, 26000, 18000, 30000, 37000, 37000,
-        25000, 26000,
-      ],
-      color: "#4549D0",
-      borderRadius: 5,
-    },
-  ],
-  exporting: {
-    enabled: true,
-  },
-  credits: {
-    enabled: false,
-  },
-};
+
 const TableData = [
   {
     title: "Insurance",
@@ -166,6 +71,27 @@ const TableData = [
 const TemplateReact = () => {
   const [show, setShow] = useState(false);
   const [openSideBar, setSideBar] = useState(false);
+  const [evidence, setEvidence] = useState();
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchEvidence = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/evidence/search/${searchQuery}`
+        );
+        const responseData = response.data.data;
+        console.log(responseData)
+        setEvidence(responseData);
+      } catch (err) {
+        console.error("Error fetching evidence:", err);
+        setError("Error fetching evidence.");
+      }
+    };
+
+    fetchEvidence();
+  }, []);
 
   return (
     <div

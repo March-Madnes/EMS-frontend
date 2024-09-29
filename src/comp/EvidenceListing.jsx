@@ -7,12 +7,11 @@ const EvidenceListing = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Fetch all evidence when the component mounts
     const fetchEvidence = async () => {
       try {
         const response = await axios.get("http://localhost:3000/evidence");
+        console.log("Fetched evidence:", response.data.data); // Log the fetched evidence
         setEvidence(response.data.data);
-        console.log("Evidence fetched:", response);
       } catch (err) {
         console.error("Error fetching evidence:", err);
         setError("Error fetching evidence.");
@@ -29,17 +28,34 @@ const EvidenceListing = () => {
     }
 
     try {
+      // Reset the evidence to an empty array when a new search starts
+      setEvidence([]);
+
       const response = await axios.get(
         `http://localhost:3000/evidence/search/${searchQuery}`
       );
-      setEvidence(response.data.data);
-      setError(""); // Clear any previous error
-      console.log("Evidence fetched:", response);
+
+      const responseData = response.data.data;
+
+      // Make sure we handle both array and object cases
+      const evidenceArray = Array.isArray(responseData)
+        ? responseData
+        : [responseData]; // Wrap a single object in an array
+
+      setEvidence(evidenceArray); // Replace the current evidence with new search result
+      setError(""); // Clear any previous errors
+
+      console.log("Search result:", responseData);
     } catch (err) {
       setError("Error fetching evidence. Please check the CID and try again.");
       console.error("Error fetching evidence:", err);
     }
   };
+
+  useEffect(() => {
+    // Log updated evidence to ensure re-render
+    console.log("Evidence state updated:", evidence);
+  }, [evidence]);
 
   return (
     <div className="max-w-screen-xl mx-auto p-6 bg-gray-50 min-h-screen">
@@ -64,10 +80,10 @@ const EvidenceListing = () => {
       )}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-6">
-        {evidence.length > 0 &&
+        {evidence && evidence.length > 0 ? (
           evidence.map((item, index) => (
             <div
-              key={index}
+              key={item.cid || index} // Use CID as key if available
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-start transition-transform transform hover:scale-105 duration-300"
             >
               <h2 className="text-xl font-semibold text-gray-800 mb-3">
@@ -114,7 +130,10 @@ const EvidenceListing = () => {
                 </a>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <p className="text-center text-gray-600">No evidence found.</p>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React from 'react'
 import UnderLine from '../assets/underline.svg'
+import { Link } from 'react-router-dom';
 
 export const Landing = () => {
   return (
@@ -32,9 +33,9 @@ export const Landing = () => {
           </section>
           <div className="flex flex-wrap justify-center items-center w-full text-sm leading-tight text-center">
             <div className="flex flex-col justify-center items-center self-stretch my-auto">
-              <button className="rounded-full py-5 px-6 md:px-9 lg:px-9 min-h-[54px] rounded-[45px] gradient">
+              <Link to={'/dashboard'} className="rounded-full py-5 px-6 md:px-9 lg:px-9 min-h-[54px] rounded-[45px] gradient">
                 Start Using
-              </button>
+              </Link>
             </div>
           </div>
         </div>

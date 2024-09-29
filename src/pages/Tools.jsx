@@ -9,40 +9,49 @@ const Tools = () => {
 
   const tools = [
     {
-        name: "Bit by Bit Imaging",
-        description: "Forensic tool for creating forensic images of hard drives and USB drives.",
-        icon: "📀",
+      name: "Bit by Bit Imaging Windows",
+      description:
+        "Forensic tool for creating forensic images of hard drives and USB drives.",
+      icon: "📀",
+      link: "https://github.com/March-Madnes/DigitalForensicTool/raw/refs/heads/main/dist/BlockIntel.exe",
     },
     {
-      name: "Autopsy & The Sleuth Kit",
-      description: "Well-known forensics toolkits for analyzing hard drives and smartphones with user-friendly GUI.",
-      icon: "🕵️‍♂️",
-    },
-    {
-      name: "EnCase",
-      description: "Powerful tool for recovering deleted files, analyzing data, and examining digital evidence.",
+      name: "Bit by Bit Imaging Linux",
+      description:
+        "Forensic tool for creating forensic images of hard drives and USB drives.",
       icon: "🔍",
+      link: "https://github.com/March-Madnes/DigitalForensicTool/raw/refs/heads/main/dist/BlockIntel",
     },
-    {
-      name: "FTK Imager",
-      description: "Enables forensic professionals to create forensic images and extract data from file systems.",
-      icon: "🖼️",
-    },
-    {
-      name: "X-Ways Forensic",
-      description: "Efficient tool for handling large volumes of data, offering file carving, registry analysis, and timeline creation.",
-      icon: "📊",
-    },
-    {
-      name: "Cellebrite UFED Physical Analyzer",
-      description: "Specializes in mobile forensics, extracting and analyzing data from smartphones and tablets.",
-      icon: "📱",
-    },
-    {
-      name: "Oxygen Forensic Suite",
-      description: "Comprehensive mobile forensics tool supporting various devices with detailed reporting.",
-      icon: "💻",
-    },
+    // {
+    //   name: "EnCase",
+    //   description:
+    //     "Powerful tool for recovering deleted files, analyzing data, and examining digital evidence.",
+    //   icon: "🔍",
+    // },
+    // {
+    //   name: "FTK Imager",
+    //   description:
+    //     "Enables forensic professionals to create forensic images and extract data from file systems.",
+    //   icon: "🖼️",
+    // },
+    // {
+    //   name: "X-Ways Forensic",
+    //   description:
+    //     "Efficient tool for handling large volumes of data, offering file carving, registry analysis, and timeline creation.",
+    //   icon: "📊",
+    // },
+    // {
+    //   name: "Cellebrite UFED Physical Analyzer",
+    //   description:
+    //     "Specializes in mobile forensics, extracting and analyzing data from smartphones and tablets.",
+    //   icon: "📱",
+    // },
+    // {
+    //   name: "Oxygen Forensic Suite",
+    //   description:
+    //     "Comprehensive mobile forensics tool supporting various devices with detailed reporting.",
+    //   icon: "💻",
+    // },
   ];
 
   const navigate = useNavigate();
@@ -119,7 +128,8 @@ const Tools = () => {
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">
                   {tool.name}
                 </h2>
-                <p className="text-gray-600">{tool.description}</p>
+                <p className="text-gray-600 mb-5">{tool.description}</p>
+                <a href={tool.link} class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ">Download</a>
               </div>
             ))}
           </div>

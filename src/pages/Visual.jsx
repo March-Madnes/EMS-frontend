@@ -79,7 +79,7 @@ const TemplateReact = () => {
     const fetchEvidence = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/evidence/search/${searchQuery}`
+          `http://localhost:3000/evidence/search/${id}`
         );
         const responseData = response.data.data;
         console.log(responseData)

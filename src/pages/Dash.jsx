@@ -1,123 +1,116 @@
-import React, {useState} from 'react'
-import { Cards } from '../comp/Cards';
+import React, { useState, useEffect } from "react";
+import { Cards } from "../comp/Cards";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../services/AuthContext"; // Import the useAuth hook
 
 export const Dash = () => {
-    const [empty,setEmpty] = useState(true);
+  const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
+  const [showDropdown, setShowDropdown] = useState(false); // For the account dropdown
+  const navigate = useNavigate();
+
+  // Redirect to login if not connected
+  useEffect(() => {
+    if (!account && !loading) {
+      navigate("/login");
+    }
+  }, [account, loading, navigate]);
+
+  // Display a loading spinner or message while checking the connection
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div style={{ background: "#171420" }} className="h-auto">
-      <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+      <nav className="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <a
+            href="#"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               EMS
             </span>
           </a>
-          <button
-            data-collapse-toggle="navbar-solid-bg"
-            type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="navbar-solid-bg"
-            aria-expanded="false"
-          >
-            <span class="sr-only">Open main menu</span>
-            <svg
-              class="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 17 14"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 1h15M1 7h15M1 13h15"
-              />
-            </svg>
-          </button>
-          <div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
-            <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-                  aria-current="page"
+          <div className="flex items-center">
+            {/* Account Information with Avatar */}
+            {account && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="flex items-center text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
                 >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Services
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={`https://avatars.dicebear.com/api/pixel-art/${account}.svg`}
+                    alt="Account Avatar"
+                  />
+                  <span className="ml-2">
+                    {`${account.slice(0, 6)}...${account.slice(-4)}`}
+                  </span>
+                </button>
+
+                {/* Dropdown menu for MetaMask options */}
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-20">
+                    <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                      Connected:{" "}
+                      {`${account.slice(0, 6)}...${account.slice(-4)}`}
+                    </div>
+                    <div
+                      onClick={disconnectMetaMask}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-red-500"
+                    >
+                      Disconnect
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </nav>
 
-      {empty && (
-        <div class="flex items-center justify-center w-full p-5">
-          <label
-            for="dropzone-file"
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg
-                class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 16"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                />
-              </svg>
-              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Click to upload</span> or drag and
-                drop
-              </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
-              </p>
-            </div>
-            <input id="dropzone-file" type="file" class="hidden" />
-          </label>
-        </div>
-      )}
-        <div className='flex gap-3 flex-wrap align-middle justify-center m-5'>
-        < Cards/>
-        < Cards/>
-        < Cards/>
-        < Cards/>
-        < Cards/>
+      <div className="flex items-center justify-center w-full p-5">
+        <label
+          htmlFor="dropzone-file"
+          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg
+              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="font-semibold">Click to upload</span> or drag and
+              drop
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input id="dropzone-file" type="file" className="hidden" />
+        </label>
+      </div>
 
-        </div>
+      <div className="flex gap-3 flex-wrap align-middle justify-center m-5">
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+      </div>
     </div>
   );
-}
+};

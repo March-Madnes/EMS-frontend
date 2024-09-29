@@ -6,6 +6,7 @@ import { Dash } from "./pages/Dash";
 import { AuthProvider } from "./services/AuthContext";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Tools from "./pages/Tools";
+import TemplateReact from "./pages/Visual";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/visual" element={<TemplateReact/>}></Route>
       </Routes>
     </AuthProvider>
   );

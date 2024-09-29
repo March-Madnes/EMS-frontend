@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Cards } from "../comp/Cards";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext"; // Import the useAuth hook
+import EvidenceListing from "../comp/EvidenceListing";
 import axios from "axios";
 
 export const Dash = () => {
@@ -10,6 +10,8 @@ export const Dash = () => {
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileDescription, setFileDescription] = useState(""); // State for file description
+  const [fileName, setFileName] = useState(""); // State for file name
 
   const navigate = useNavigate();
 
@@ -26,18 +28,22 @@ export const Dash = () => {
   }
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-    setSelectedFile(event.target.files[0]);
+    const selected = event.target.files[0];
+    setFile(selected);
+    setSelectedFile(selected);
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
-      setUploadStatus("No file selected");
+    if (!file || !fileName || !fileDescription) {
+      setUploadStatus("Please provide a file, name, and description.");
       return;
     }
 
     let data = new FormData();
     data.append("file", file);
+    data.append("owner", account); // Include the owner's MetaMask ID
+    data.append("fileName", fileName); // Include the file name
+    data.append("fileDescription", fileDescription); // Include the file description
 
     let config = {
       method: "post",
@@ -56,6 +62,10 @@ export const Dash = () => {
 
       if (response.data.success) {
         setUploadStatus(`File uploaded! IPFS Hash: ${response.data.ipfsHash}`);
+        setSelectedFile(null); // Clear selected file after successful upload
+        setFile(null); // Clear file state after successful upload
+        setFileName(""); // Reset file name field
+        setFileDescription(""); // Reset file description field
       } else {
         setUploadStatus("Upload failed");
       }
@@ -139,51 +149,58 @@ export const Dash = () => {
                 and drop
               </p>
               <p className="text-xs text-gray-500">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
+                PNG, JPG, or PDF (MAX. 10MB)
               </p>
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
             </div>
-            <input
-              id="dropzone-file"
-              type="file"
-              className="hidden"
-              onChange={handleFileChange}
-            />
           </label>
         </div>
 
-        {/* Display selected file */}
+        {/* File Name and Description Inputs */}
+        <input
+          type="text"
+          placeholder="File Name"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+        />
+        <textarea
+          placeholder="File Description"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          value={fileDescription}
+          onChange={(e) => setFileDescription(e.target.value)}
+        />
+
+        {/* Selected File Preview */}
         {selectedFile && (
-          <div className="flex items-center justify-center mb-4">
-            <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow">
-              <img
-                src="/path/to/icon.svg"
-                alt="File Icon"
-                className="w-8 h-8"
-              />
-              <span>{selectedFile.name}</span>
-            </div>
+          <div className="mb-4 p-2 border border-gray-300 rounded">
+            <h3 className="font-semibold">Selected File:</h3>
+            <p className="text-sm">{selectedFile.name}</p>
+            <p className="text-xs text-gray-500">
+              Size: {selectedFile.size} bytes
+            </p>
+            <p className="text-xs text-gray-500">Type: {selectedFile.type}</p>
           </div>
         )}
 
         <button
           onClick={handleFileUpload}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+          className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-500"
         >
           Upload File
         </button>
-
-        {/* Upload status message */}
-        <p className="mt-4 text-center text-gray-800">{uploadStatus}</p>
-
-        {/* Cards */}
-        <div className="flex gap-3 flex-wrap justify-center mt-5">
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-        </div>
+        {uploadStatus && <p className="mt-4 text-sm">{uploadStatus}</p>}
       </div>
+
+      {/* Evidence Listing Section */}
+      <EvidenceListing />
     </div>
   );
 };
+
+export default Dash;

@@ -2,6 +2,7 @@ import React from 'react'
 import UnderLine from '../assets/underline.svg'
 import { Link } from 'react-router-dom';
 import { Navbar } from '../comp/Navbar';
+import { Footer } from '../comp/Footer';
 
 export const Landing = () => {
   return (
@@ -44,6 +45,7 @@ export const Landing = () => {
         </div>
       </section>
     </main>
+    <Footer/>
     </>
   );
 };

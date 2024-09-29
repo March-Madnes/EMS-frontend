@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext";
+import { Footer } from "../comp/Footer";
 
 const Tools = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
@@ -124,6 +125,7 @@ const Tools = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext"; // Import the useAuth hook
 import EvidenceListing from "../comp/EvidenceListing";
 import axios from "axios";
+import { Footer } from "../comp/Footer";
 
 export const Dash = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
@@ -83,8 +84,8 @@ export const Dash = () => {
           <a href="/dashboard" className="text-2xl font-semibold">
             EMS
           </a>
-          <div className="flex items-center">
-            <a href="/tools" className="text-md text-gray-800 mx-3">
+          <div className="flex items-center gap-2">
+            <a href="/tools" className="text-md text-gray-800 mx-3 font-medium text-gray-500">
               Tools
             </a>
             {account && (
@@ -199,6 +200,7 @@ export const Dash = () => {
 
       {/* Evidence Listing Section */}
       <EvidenceListing />
+      <Footer/>
     </div>
   );
 };

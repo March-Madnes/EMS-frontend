@@ -1,9 +1,13 @@
 import React from 'react'
 import UnderLine from '../assets/underline.svg'
 import { Link } from 'react-router-dom';
+import { Navbar } from '../comp/Navbar';
+import { Footer } from '../comp/Footer';
 
 export const Landing = () => {
   return (
+    <>
+      <Navbar/>
     <main className="flex flex-col justify-center items-center pt-24">
       <section className="flex flex-col justify-center items-center px-6 md:px-10 lg:px-40 py-16 max-w-full">
         <div className="flex flex-col justify-center items-center w-full max-w-[866px]">
@@ -14,7 +18,7 @@ export const Landing = () => {
               </h1>
               <div className="block z-10 flex-wrap gap-2 mt-2 w-full">
                 <p className="flex-auto self-start mt-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-none text-center text-indigo-950">
-                  Tamper Proof, Transparent, and Secure
+                  Tamper Proof and Secure
                 </p>
                 <div className="mt-2 justify-end flex">
                   <img
@@ -41,5 +45,7 @@ export const Landing = () => {
         </div>
       </section>
     </main>
+    <Footer/>
+    </>
   );
 };

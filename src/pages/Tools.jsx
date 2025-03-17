@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext";
 import { Footer } from "../comp/Footer";
+import NavBar from "../comp/Navv2";
 
 const Tools = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
@@ -69,49 +70,9 @@ const Tools = () => {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800">
       {/* Nav */}
-      <nav className="border-b bg-white shadow">
-        <div className="max-w-screen-xl mx-auto p-4 flex items-center justify-between">
-          <a href="/dashboard" className="text-2xl font-semibold">
-            EMS
-          </a>
-          <div className="flex items-center">
-            <a href="/tools" className="text-md text-gray-800 mx-3">
-              Tools
-            </a>
-            {account && (
-              <div className="relative">
-                <button
-                  onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center text-sm text-gray-800"
-                >
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={`https://avatars.dicebear.com/api/pixel-art/${account}.svg`}
-                    alt="Account Avatar"
-                  />
-                  <span className="ml-2">
-                    {`${account.slice(0, 6)}...${account.slice(-4)}`}
-                  </span>
-                </button>
-                {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-20">
-                    <div className="px-4 py-2 text-sm text-gray-700">
-                      Connected:{" "}
-                      {`${account.slice(0, 6)}...${account.slice(-4)}`}
-                    </div>
-                    <div
-                      onClick={disconnectMetaMask}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 cursor-pointer hover:bg-gray-100"
-                    >
-                      Disconnect
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+      <NavBar account={account} disconnectMetaMask={disconnectMetaMask} />
+      
+      {/* Main */}
 
       <div className="min-h-screen bg-gray-100 py-8">
         <div className="max-w-screen-xl mx-auto px-4">

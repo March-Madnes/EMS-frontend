@@ -4,6 +4,7 @@ import { useAuth } from "../services/AuthContext"; // Import the useAuth hook
 import EvidenceListing from "../comp/EvidenceListing";
 import axios from "axios";
 import { Footer } from "../comp/Footer";
+import NavBar from "../comp/Navv2";
 
 export const Dash = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
@@ -77,57 +78,11 @@ export const Dash = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800">
-      {/* Nav */}
-      <nav className="border-b bg-white shadow">
-        <div className="max-w-screen-xl mx-auto p-4 flex items-center justify-between">
-          <a href="/dashboard" className="text-2xl font-semibold">
-            EMS
-          </a>
-          <div className="flex items-center gap-2">
-            <a
-              href="/tools"
-              className="text-md text-gray-800 mx-3 font-medium text-gray-500"
-            >
-              Tools
-            </a>
-            {account && (
-              <div className="relative">
-                <button
-                  onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center text-sm text-gray-800"
-                >
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={`https://avatars.dicebear.com/api/pixel-art/${account}.svg`}
-                    alt="Account Avatar"
-                  />
-                  <span className="ml-2">
-                    {`${account.slice(0, 6)}...${account.slice(-4)}`}
-                  </span>
-                </button>
-                {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-20">
-                    <div className="px-4 py-2 text-sm text-gray-700">
-                      Connected:{" "}
-                      {`${account.slice(0, 6)}...${account.slice(-4)}`}
-                    </div>
-                    <div
-                      onClick={disconnectMetaMask}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 cursor-pointer hover:bg-gray-100"
-                    >
-                      Disconnect
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+    <div>
+      <NavBar account={account} disconnectMetaMask={disconnectMetaMask} ></NavBar>
 
       {/* File Upload Section */}
-      <div className="max-w-screen-xl mx-auto p-6">
+      <form className="max-w-screen-xl mx-auto p-6">
         <div className="flex justify-between items-start space-x-6">
           {/* Form on the left */}
           <div className="w-1/2">
@@ -136,12 +91,14 @@ export const Dash = () => {
               placeholder="File Name"
               className="mb-4 p-2 border border-gray-300 rounded w-full"
               value={fileName}
+              required
               onChange={(e) => setFileName(e.target.value)}
             />
             <textarea
               placeholder="File Description"
               className="mb-4 p-2 border border-gray-300 rounded w-full"
               value={fileDescription}
+              required
               onChange={(e) => setFileDescription(e.target.value)}
             />
 
@@ -206,7 +163,7 @@ export const Dash = () => {
             </label>
           </div>
         </div>
-      </div>
+      </form>
 
       {/* Evidence Listing Section */}
       <EvidenceListing />

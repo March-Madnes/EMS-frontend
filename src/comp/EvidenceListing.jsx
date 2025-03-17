@@ -58,7 +58,7 @@ const EvidenceListing = () => {
   }, [evidence]);
 
   return (
-    <div className="max-w-screen-xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="max-w-screen-xl mx-auto p-6 min-h-screen">
       <div className="flex justify-end mb-6">
         <input
           type="text"
@@ -83,53 +83,113 @@ const EvidenceListing = () => {
         {evidence && evidence.length > 0 ? (
           evidence.map((item, index) => (
             <div
-              key={item.cid || index} // Use CID as key if available
-              className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-start transition-transform transform hover:scale-105 duration-300"
+              key={item.cid || index}
+              class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-3">
-                {item.name || "Evidence File"}
-              </h2>
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Description:</span>{" "}
+              <a href="#">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {item.name || "Evidence File"}
+                </h5>
+              </a>
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                 {item.description || "No description"}
               </p>
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Original Name:</span>{" "}
-                {item.originalName || "N/A"}
-              </p>
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">MIME Type:</span>{" "}
-                {item.mimeType || "N/A"}
-              </p>
-              <p className="text-gray-600 mb-2 break-all">
-                <span className="font-semibold">CID:</span> {item.cid}
-              </p>
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Timestamp:</span>{" "}
-                {new Date(item.timestamp).toLocaleString()}
-              </p>
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Owner MetaMask ID:</span>{" "}
-                {item.owner}
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                Timestamp: {new Date(item.timestamp).toLocaleString()}
               </p>
 
-              <div className="mt-4">
-                <a
-                  href={`http://localhost:3000/retrieve-file/${item.cid}`}
-                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
+              <a
+                href={`http://localhost:3000/retrieve-file/${item.cid}`}
+                class="inline-flex items-center px-3 py-2 text-sm mr-4 font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Download
+                <svg
+                  class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 18"
                 >
-                  Download
-                </a>
-                <a
-                  href="#"
-                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline ml-4"
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                View Report
+                <svg
+                  class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
                 >
-                  Report
-                </a>
-              </div>
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </a>
             </div>
+
+            // <div
+            //   key={item.cid || index} // Use CID as key if available
+            //   className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-start transition-transform transform hover:scale-105 duration-300"
+            // >
+            //   <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            //     {item.name || "Evidence File"}
+            //   </h2>
+            //   <p className="text-gray-600 mb-2">
+            //     <span className="font-semibold">Description:</span>{" "}
+            //     {item.description || "No description"}
+            //   </p>
+            //   <p className="text-gray-600 mb-2">
+            //     <span className="font-semibold">Original Name:</span>{" "}
+            //     {item.originalName || "N/A"}
+            //   </p>
+            //   <p className="text-gray-600 mb-2">
+            //     <span className="font-semibold">MIME Type:</span>{" "}
+            //     {item.mimeType || "N/A"}
+            //   </p>
+            //   <p className="text-gray-600 mb-2 break-all">
+            //     <span className="font-semibold">CID:</span> {item.cid}
+            //   </p>
+            //   <p className="text-gray-600 mb-2">
+            //     <span className="font-semibold">Timestamp:</span>{" "}
+            //     {new Date(item.timestamp).toLocaleString()}
+            //   </p>
+            //   <p className="text-gray-600 mb-2">
+            //     <span className="font-semibold">Owner MetaMask ID:</span>{" "}
+            //     {item.owner}
+            //   </p>
+
+            //   <div className="mt-4">
+            //     <a
+            //       href={`http://localhost:3000/retrieve-file/${item.cid}`}
+            //       className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline"
+            //       target="_blank"
+            //       rel="noopener noreferrer"
+            //     >
+            //       Download
+            //     </a>
+            //     <a
+            //       href="#"
+            //       className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline ml-4"
+            //     >
+            //       Report
+            //     </a>
+            //   </div>
+            // </div>
           ))
         ) : (
           <p className="text-center text-gray-600">No evidence found.</p>

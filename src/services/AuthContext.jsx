@@ -13,41 +13,34 @@ export const AuthProvider = ({ children }) => {
   const connectMetaMask = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-        setLoading(false);
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+        }
       } catch (error) {
-        console.error("Failed to connect MetaMask", error);
-        setLoading(false);
+        console.error("🛑 MetaMask connection error:", error);
       }
     } else {
-      alert("Please install MetaMask to use this app.");
-      setLoading(false);
+      alert("MetaMask is not installed. Please install it to continue.");
     }
   };
 
   const checkMetaMaskConnection = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
         if (accounts.length > 0) {
           setAccount(accounts[0]);
         } else {
-          navigate("/login");
+          setAccount(null);
         }
       } catch (error) {
-        console.error("Error checking MetaMask connection:", error);
-        navigate("/login");
-      } finally {
-        setLoading(false);
+        console.error("🛑 Error checking MetaMask connection:", error);
       }
     } else {
-      navigate("/login");
+      console.warn("🦊 MetaMask not found");
     }
+    setLoading(false);
   };
 
   const disconnectMetaMask = () => {
@@ -58,14 +51,27 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     checkMetaMaskConnection();
 
-    window.ethereum?.on("accountsChanged", (accounts) => {
+    const handleAccountChange = (accounts) => {
       if (accounts.length > 0) {
         setAccount(accounts[0]);
       } else {
         disconnectMetaMask();
       }
-    });
+    };
+
+    window.ethereum?.on("accountsChanged", handleAccountChange);
+
+    // Cleanup the listener to avoid duplicate triggers
+    return () => {
+      window.ethereum?.removeListener("accountsChanged", handleAccountChange);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!loading && !account) {
+      navigate("/login");
+    }
+  }, [account, loading, navigate]);
 
   return (
     <AuthContext.Provider value={{ account, connectMetaMask, disconnectMetaMask, loading }}>

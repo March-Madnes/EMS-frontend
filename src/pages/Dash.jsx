@@ -10,6 +10,7 @@ export const Dash = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileDescription, setFileDescription] = useState(""); // State for file description
   const [fileName, setFileName] = useState(""); // State for file name
@@ -33,45 +34,42 @@ export const Dash = () => {
     setSelectedFile(selected);
   };
 
-  const handleFileUpload = async () => {
-    if (!file || !fileName || !fileDescription) {
-      setUploadStatus("Please provide a file, name, and description.");
-      return;
-    }
-
-    let data = new FormData();
-    data.append("file", file);
-    data.append("owner", account); // Include the owner's MetaMask ID
-    data.append("fileName", fileName); // Include the file name
-    data.append("fileDescription", fileDescription); // Include the file description
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity, // Ensure large files are handled
-      url: "http://localhost:3000/upload",
-      headers: {
-        "Content-Type": "multipart/form-data", // This is enough in the browser
-      },
-      data: data,
-    };
-
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    setUploadStatus("Uploading...");
+    setUploading(true);
     try {
-      setUploadStatus("Uploading...");
-
-      const response = await axios.request(config);
-
-      if (response.data.success) {
-        setUploadStatus(`File uploaded! IPFS Hash: ${response.data.ipfsHash}`);
-        setSelectedFile(null);
-        setFile(null);
-        setFileName("");
-        setFileDescription("");
-      } else {
-        setUploadStatus("Upload failed");
+      const formData = new FormData();
+      
+      if (!file) {
+        alert("Please select a file.");
+        return;
       }
+      formData.append("file", file);
+      formData.append("owner", import.meta.env.VITE_APP_OWNER);
+      formData.append("fileName", fileName);
+      formData.append("fileDescription", fileDescription);
+
+      const response = await axios.post("http://localhost:3000/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("✅ Uploaded:", response.data);
+      alert("Upload successful!");
+      setUploadStatus("Upload successful!");
+      setFile(null);
+      setFileDescription("");
+      setFileName("");
+      setSelectedFile(null);
+
+      setUploading(false);
     } catch (error) {
-      console.error(error);
-      setUploadStatus(`Error: ${error.message}`);
+      console.error("❌ Upload failed:", error);
+      alert("Upload failed. Check the console for details.");
+      setUploadStatus("Upload failed.");
+      setUploading(false);
     }
   };
 
@@ -115,7 +113,8 @@ export const Dash = () => {
             )}
 
             <button
-              onClick={handleFileUpload}
+              onClick={handleUpload}
+              disabled={uploading}
               className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-500"
             >
               Upload File

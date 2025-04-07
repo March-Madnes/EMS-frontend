@@ -8,7 +8,6 @@ import NavBar from "../comp/Navv2";
 
 export const Dash = () => {
   const { account, disconnectMetaMask, loading } = useAuth(); // Use the latest auth context
-  const [showDropdown, setShowDropdown] = useState(false); // For the account dropdown
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,7 +23,6 @@ export const Dash = () => {
     }
   }, [account, loading, navigate]);
 
-  // Display a loading spinner or message while checking the connection
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -64,10 +62,10 @@ export const Dash = () => {
 
       if (response.data.success) {
         setUploadStatus(`File uploaded! IPFS Hash: ${response.data.ipfsHash}`);
-        setSelectedFile(null); // Clear selected file after successful upload
-        setFile(null); // Clear file state after successful upload
-        setFileName(""); // Reset file name field
-        setFileDescription(""); // Reset file description field
+        setSelectedFile(null);
+        setFile(null);
+        setFileName("");
+        setFileDescription("");
       } else {
         setUploadStatus("Upload failed");
       }
@@ -151,7 +149,7 @@ export const Dash = () => {
                   and drop
                 </p>
                 <p className="text-xs text-gray-500">
-                  PNG, JPG, or PDF (MAX. 10MB)
+                  PNG, JPG, or PDF
                 </p>
                 <input
                   id="dropzone-file"

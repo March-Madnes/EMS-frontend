@@ -12,13 +12,14 @@ const EvidenceListing = () => {
   useEffect(() => {
     const fetchEvidence = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/evidence", {
+        const response = await axios.get("http://localhost:3000/accessibleEvidence", {
           params: {
-            viewer: account,
+            viewer: import.meta.env.VITE_APP_OWNER,
           },
         });
-        console.log("Fetched evidence:", response.data.data); // Log the fetched evidence
-        setEvidence(response.data.data);
+        console.log(import.meta.env.VITE_APP_OWNER)
+        console.log("Fetched evidence:", response.data.accessibleEvidence); // Log the fetched evidence
+        setEvidence(response.data.accessibleEvidence);
       } catch (err) {
         console.error("Error fetching evidence:", err);
         setError("Error fetching evidence.");

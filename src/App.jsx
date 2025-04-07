@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Landing } from "./pages/Landing";
+import EvReport from "./pages/EvReport";
 import Login from "./pages/Login";
 import { Dash } from "./pages/Dash";
 import { AuthProvider } from "./services/AuthContext";
@@ -27,6 +28,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Tools />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/report/:id"
+          element={
+            <ProtectedRoute>
+              <EvReport />
             </ProtectedRoute>
           }
         />

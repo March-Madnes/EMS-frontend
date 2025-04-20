@@ -8,6 +8,8 @@ import { AuthProvider } from "./services/AuthContext";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Tools from "./pages/Tools";
 import TemplateReact from "./pages/Visual";
+import CaseManager from "./pages/cases/CaseManager";
+import CaseSettingsPage from "./pages/cases/CaseSettingsPage";
 
 function App() {
   return (
@@ -20,6 +22,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Dash />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cases"
+          element={
+            <ProtectedRoute>
+              <CaseManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/case-settings/:id"
+          element={
+            <ProtectedRoute>
+              <CaseSettingsPage />
             </ProtectedRoute>
           }
         />
@@ -39,7 +57,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/visual/:id" element={<TemplateReact/>}></Route>
+        <Route path="/visual/:id" element={<TemplateReact />}></Route>
       </Routes>
     </AuthProvider>
   );

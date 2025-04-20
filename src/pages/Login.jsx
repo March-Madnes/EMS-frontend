@@ -9,7 +9,7 @@ const Login = () => {
   // Redirect to dashboard if the account is connected
   useEffect(() => {
     if (account) {
-      navigate("/dashboard");
+      navigate("/evidences");
     }
   }, [account, navigate]);
 
